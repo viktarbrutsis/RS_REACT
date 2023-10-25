@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import TopSectionView from '../TopSection/TopSectionView';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class MainPageView extends Component {
@@ -6,6 +7,7 @@ class MainPageView extends Component {
     return (
       <div className="container">
         <h1>My first React App</h1>
+        <TopSectionView />
       </div>
     );
   }

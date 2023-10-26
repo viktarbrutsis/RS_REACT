@@ -1,8 +1,8 @@
 import { Component } from 'react';
 
-fetch('https://rickandmortyapi.com/api')
-  .then((response) => response.json())
-  .then((data) => console.log(data));
+// fetch('https://rickandmortyapi.com/api')
+//   .then((response) => response.json())
+//   .then((data) => console.log(data));
 
 class BottomSectionView extends Component {
   render() {

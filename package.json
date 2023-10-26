@@ -12,6 +12,9 @@
     "format": "fix",
     "prepare": "husky install"
   },
+  "lint-staged": {
+    "*": "eslint"
+  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

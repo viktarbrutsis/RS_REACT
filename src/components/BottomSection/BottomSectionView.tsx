@@ -1,13 +1,28 @@
 import { Component } from 'react';
+import BottomSectionItem from './BottomSectionItem';
+export class BottomSectionView extends Component {
+  constructor() {
+    super();
+    this.state = {
+      data: {},
+    };
+  }
 
-// fetch('https://rickandmortyapi.com/api')
-//   .then((response) => response.json())
-//   .then((data) => console.log(data));
+  componentDidMount(): void {
+    fetch('https://swapi.dev/api/people/')
+      .then((response) => response.json())
+      .then((data) => this.setState({ data: data }));
+  }
 
-class BottomSectionView extends Component {
   render() {
-    return <div className="bottomsection">Nothing</div>;
+    {
+      console.log(this.state.data.results);
+      console.log(Array.isArray(this.state.data.results));
+    }
+    return (
+      <div className="bottomsection">
+        <BottomSectionItem name="gnida" />
+      </div>
+    );
   }
 }
-
-export default BottomSectionView;

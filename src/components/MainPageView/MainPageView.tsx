@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import TopSectionView from '../TopSection/TopSectionView';
-import BottomSectionView from '../BottomSection/BottomSectionView';
+import { BottomSectionView } from '../BottomSection/BottomSectionView';
 
 class MainPageView extends Component {
   render() {

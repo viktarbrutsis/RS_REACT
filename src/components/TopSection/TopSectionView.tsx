@@ -19,9 +19,9 @@ class TopSectionView extends Component {
     // localStorage.clear();
   };
 
-  useEffect() {
-    this.getSearchValue();
-  }
+  // useEffect() {
+  //   this.getSearchValue();
+  // }
 
   render() {
     return (

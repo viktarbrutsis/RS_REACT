@@ -1,24 +1,27 @@
-import { Component } from 'react';
+import { createRef, Component } from 'react';
 
 class TopSectionView extends Component {
-  constructor() {
-    super();
+  constructor(placeholder: string | Readonly<string>) {
+    super(placeholder);
     this.state = {
       searchValue: localStorage.getItem('search') || 'search',
     };
   }
 
+  inputRef = createRef<HTMLInputElement>();
+
   getSearchValue = () => {
-    const input = document.querySelector(
-      '.topsection-input'
-    ) as HTMLInputElement;
-    const inputValue = input.value;
-    localStorage.setItem('search', inputValue);
-    localStorage.getItem('search');
-    input.value = '';
+    console.log(this.inputRef.current.value);
+    localStorage.setItem('search', this.inputRef.current.value || '');
     this.setState({ searchValue: localStorage.getItem('search') });
+    this.inputRef.current.value = '';
+    // localStorage.getItem('search');
     // localStorage.clear();
   };
+
+  useEffect() {
+    this.getSearchValue();
+  }
 
   render() {
     return (
@@ -27,6 +30,7 @@ class TopSectionView extends Component {
           type="text"
           className="topsection-input"
           placeholder={this.state.searchValue}
+          ref={this.inputRef}
         />
         <button
           className="button topsection-button"

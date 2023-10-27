@@ -1,6 +1,6 @@
 import { createRef, Component } from 'react';
 
-class TopSectionView extends Component {
+class TopSectionView extends Component<string, { searchValue: string }> {
   constructor(placeholder: string | Readonly<string>) {
     super(placeholder);
     this.state = {
@@ -11,9 +11,9 @@ class TopSectionView extends Component {
   inputRef = createRef<HTMLInputElement>();
 
   getSearchValue = () => {
-    console.log(this.inputRef.current.value);
-    localStorage.setItem('search', this.inputRef.current.value || '');
-    this.setState({ searchValue: localStorage.getItem('search') });
+    console.log(this.inputRef.current?.value);
+    localStorage.setItem('search', this.inputRef.current?.value || '');
+    this.setState({ searchValue: localStorage.getItem('search') || '' });
     this.inputRef.current.value = '';
     // localStorage.getItem('search');
     // localStorage.clear();

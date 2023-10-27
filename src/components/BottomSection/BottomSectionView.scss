@@ -1,6 +1,15 @@
 .bottomsection {
-  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
   border: 2px solid $color-additional;
   border-radius: 20px;
   margin-top: 15px;
+  background-color: $color-white-darkest;
+}
+
+img {
+  width: 200px;
+  height: 200px;
 }

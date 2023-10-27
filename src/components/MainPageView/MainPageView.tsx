@@ -7,7 +7,7 @@ class MainPageView extends Component {
     return (
       <div className="container">
         <h1>My first React App</h1>
-        <h3 className="search-title">Search</h3>
+        <h3 className="search-title">Search the species in Star Wars</h3>
         <TopSectionView />
         <h3 className="search-result">Search result</h3>
         <BottomSectionView />

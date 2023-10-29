@@ -1,0 +1,15 @@
+.result-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 250px;
+  height: 250px;
+  padding: 10px;
+  border-radius: 100%;
+  border: 2px solid $color-additional;
+  margin: 10px;
+  color: $color-primary;
+  &_span {
+    color: $color-active;
+  }
+}

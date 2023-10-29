@@ -19,7 +19,7 @@ module.exports = {
       env: {
         node: true,
       },
-      files: ['.eslintrc.{js,cjs}'],
+      files: ['.eslintrc.{js,cjs}', '.json'],
       parserOptions: {
         sourceType: 'script',
       },
@@ -35,5 +35,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 0,
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
+    'no-console': 'off',
   },
 };

@@ -19,17 +19,13 @@ class TopSectionView extends Component<string, { searchValue: string }> {
     // localStorage.clear();
   };
 
-  // useEffect() {
-  //   this.getSearchValue();
-  // }
-
   render() {
     return (
       <div className="topsection">
         <input
           type="text"
           className="topsection-input"
-          placeholder={this.state.searchValue}
+          placeholder={localStorage.getItem('search')}
           ref={this.inputRef}
         />
         <button

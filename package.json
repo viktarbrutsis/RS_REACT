@@ -13,7 +13,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.tsx": "eslint"
+    "*.{js, jsx, ts, tsx}": "eslint"
   },
   "dependencies": {
     "axios": "^1.6.0",

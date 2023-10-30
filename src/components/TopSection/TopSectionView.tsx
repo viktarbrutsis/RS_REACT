@@ -3,31 +3,31 @@ import { createRef, Component } from 'react';
 interface SearchResult {
   onSearch: (searchValue: string) => void;
 }
-class TopSectionView extends Component<
-  SearchBlockProps,
-  { searchValue: string }
-> {
+class TopSectionView extends Component<SearchResult, { searchValue: string }> {
   constructor(props: SearchResult) {
     super(props);
     this.state = {
       searchValue: '',
     };
   }
+
   inputRef = createRef<HTMLInputElement>();
-  getSearchValue = () => {
-    console.log(this.inputRef.current?.value);
-    localStorage.setItem('search', this.inputRef.current?.value || '');
+
+  getSearchValue = async () => {
     this.setState({ searchValue: this.inputRef.current?.value || '' });
-    this.inputRef.current.value = '';
+    localStorage.setItem('search', this.inputRef.current?.value || '');
     this.props.onSearch(this.state.searchValue.trim());
+    // this.inputRef.current.value = '';
   };
+
   render() {
+    const { searchValue } = this.state;
     return (
       <div className="topsection">
         <input
           type="text"
           className="topsection-input"
-          placeholder={this.state.searchValue}
+          placeholder={searchValue}
           ref={this.inputRef}
         />
         <button

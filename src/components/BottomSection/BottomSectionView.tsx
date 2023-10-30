@@ -33,6 +33,8 @@ export class BottomSectionView extends Component<object, Data> {
     const local = localStorage.getItem('search');
     if (local) {
       this.getSearchInfo(local);
+    } else {
+      this.getStartInfo();
     }
   }
 
@@ -86,7 +88,6 @@ export class BottomSectionView extends Component<object, Data> {
           {this.state.loading ? <Loader /> : ''}
           {data.map((item) => (
             <BottomSectionItem
-              onSearch={this.getSearchInfo}
               key={item.name}
               name={item.name}
               classification={item.classification}

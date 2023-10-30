@@ -1,37 +1,33 @@
 import { createRef, Component } from 'react';
 
-interface SearchBlockProps {
+interface SearchResult {
   onSearch: (searchValue: string) => void;
 }
-
 class TopSectionView extends Component<
   SearchBlockProps,
   { searchValue: string }
 > {
-  constructor(props: SearchBlockProps) {
+  constructor(props: SearchResult) {
     super(props);
     this.state = {
-      searchValue: localStorage.getItem('search') || 'search',
+      searchValue: '',
     };
   }
-
   inputRef = createRef<HTMLInputElement>();
-
   getSearchValue = () => {
     console.log(this.inputRef.current?.value);
     localStorage.setItem('search', this.inputRef.current?.value || '');
-    this.setState({ searchValue: localStorage.getItem('search') || '' });
+    this.setState({ searchValue: this.inputRef.current?.value || '' });
     this.inputRef.current.value = '';
     this.props.onSearch(this.state.searchValue.trim());
   };
-
   render() {
     return (
       <div className="topsection">
         <input
           type="text"
           className="topsection-input"
-          placeholder={localStorage.getItem('search')}
+          placeholder={this.state.searchValue}
           ref={this.inputRef}
         />
         <button

@@ -3,6 +3,16 @@ import TopSectionView from '../TopSection/TopSectionView';
 import { BottomSectionView } from '../BottomSection/BottomSectionView';
 
 class MainPageView extends Component {
+  constructor(props: object) {
+    super(props);
+    this.state = {
+      data: [],
+      next: '',
+      loading: true,
+      local: '',
+    };
+  }
+
   render() {
     return (
       <div className="container">

@@ -8,10 +8,12 @@ interface Data {
   data: [] | MyProps[];
   next: string;
   loading: boolean;
+  local?: string;
 }
 
 export class BottomSectionView extends Component<object, Data> {
   static propTypes: {
+    onSearch: PropTypes.Requireable<object>;
     name: PropTypes.Requireable<string>;
     classification: PropTypes.Requireable<string>;
     average_height: PropTypes.Requireable<string>;
@@ -23,14 +25,21 @@ export class BottomSectionView extends Component<object, Data> {
       data: [],
       next: '',
       loading: true,
+      local: '',
     };
   }
 
-  getSearchInfo = () => {
-    const url = localStorage.getItem('search');
+  componentDidMount(): void {
+    const local = localStorage.getItem('search');
+    if (local) {
+      this.getSearchInfo(local);
+    }
+  }
+
+  getSearchInfo = async (local: string) => {
     const searchData = () => {
       axios
-        .get(`https://swapi.dev/api/species/?search=${url}`)
+        .get(`https://swapi.dev/api/species/?search=${local}`)
         .then((response) => {
           this.setState({
             data: response.data.results,
@@ -69,11 +78,6 @@ export class BottomSectionView extends Component<object, Data> {
     fetchData(url);
   };
 
-  componentDidMount(): void {
-    console.log(localStorage.getItem('search'));
-    localStorage.getItem('search') ? this.getSearchInfo() : this.getStartInfo();
-  }
-
   render() {
     const { data } = this.state;
     return (
@@ -82,6 +86,7 @@ export class BottomSectionView extends Component<object, Data> {
           {this.state.loading ? <Loader /> : ''}
           {data.map((item) => (
             <BottomSectionItem
+              onSearch={this.getSearchInfo}
               key={item.name}
               name={item.name}
               classification={item.classification}

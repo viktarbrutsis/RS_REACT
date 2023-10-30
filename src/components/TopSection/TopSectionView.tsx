@@ -1,8 +1,15 @@
 import { createRef, Component } from 'react';
 
-class TopSectionView extends Component<string, { searchValue: string }> {
-  constructor(placeholder: string | Readonly<string>) {
-    super(placeholder);
+interface SearchBlockProps {
+  onSearch: (searchValue: string) => void;
+}
+
+class TopSectionView extends Component<
+  SearchBlockProps,
+  { searchValue: string }
+> {
+  constructor(props: SearchBlockProps) {
+    super(props);
     this.state = {
       searchValue: localStorage.getItem('search') || 'search',
     };
@@ -15,8 +22,7 @@ class TopSectionView extends Component<string, { searchValue: string }> {
     localStorage.setItem('search', this.inputRef.current?.value || '');
     this.setState({ searchValue: localStorage.getItem('search') || '' });
     this.inputRef.current.value = '';
-    // localStorage.getItem('search');
-    // localStorage.clear();
+    this.props.onSearch(this.state.searchValue.trim());
   };
 
   render() {
@@ -36,7 +42,6 @@ class TopSectionView extends Component<string, { searchValue: string }> {
         >
           Search
         </button>
-        {/* <div>{localStorage.getItem('search')}</div> */}
       </div>
     );
   }

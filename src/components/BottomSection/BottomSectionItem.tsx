@@ -53,12 +53,4 @@ class BottomSectionItem extends Component<MyProps> {
   }
 }
 
-// BottomSectionItem.propTypes = {
-//   name: PropTypes.string,
-//   eye: PropTypes.string,
-//   gender: PropTypes.string,
-//   height: PropTypes.string,
-//   homeworld: PropTypes.string,
-// };
-
 export default BottomSectionItem;

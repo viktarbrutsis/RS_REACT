@@ -1,31 +1,33 @@
 import { createRef, Component } from 'react';
 
-class TopSectionView extends Component<string, { searchValue: string }> {
-  constructor(placeholder: string | Readonly<string>) {
-    super(placeholder);
+interface SearchResult {
+  onSearch: (searchValue: string) => void;
+}
+class TopSectionView extends Component<SearchResult, { searchValue: string }> {
+  constructor(props: SearchResult) {
+    super(props);
     this.state = {
-      searchValue: localStorage.getItem('search') || 'search',
+      searchValue: '',
     };
   }
 
   inputRef = createRef<HTMLInputElement>();
 
-  getSearchValue = () => {
-    console.log(this.inputRef.current?.value);
-    localStorage.setItem('search', this.inputRef.current?.value || '');
-    this.setState({ searchValue: localStorage.getItem('search') || '' });
-    this.inputRef.current.value = '';
-    // localStorage.getItem('search');
-    // localStorage.clear();
+  getSearchValue = async () => {
+    await this.setState({ searchValue: this.inputRef.current?.value || '' });
+    await localStorage.setItem('search', this.inputRef.current?.value || '');
+    this.props.onSearch(this.state.searchValue.trim());
+    // this.inputRef.current.value = '';
   };
 
   render() {
+    const { searchValue } = this.state;
     return (
       <div className="topsection">
         <input
           type="text"
           className="topsection-input"
-          placeholder={localStorage.getItem('search')}
+          placeholder={searchValue}
           ref={this.inputRef}
         />
         <button
@@ -36,7 +38,6 @@ class TopSectionView extends Component<string, { searchValue: string }> {
         >
           Search
         </button>
-        {/* <div>{localStorage.getItem('search')}</div> */}
       </div>
     );
   }

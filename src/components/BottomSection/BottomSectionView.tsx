@@ -1,97 +1,52 @@
 import { Component } from 'react';
-import BottomSectionItem, { MyProps } from './BottomSectionItem';
-import PropTypes from 'prop-types';
-import Loader from '../loader/Loader';
-import axios from 'axios';
 
-interface Data {
-  data: [] | MyProps[];
-  next: string;
-  loading: boolean;
+interface MyProps {
+  key: string;
+  name: string;
+  classification: string;
+  average_height: string;
+  homeworld: string;
+  language: string;
 }
 
-export class BottomSectionView extends Component<object, Data> {
-  static propTypes: {
-    name: PropTypes.Requireable<string>;
-    classification: PropTypes.Requireable<string>;
-    average_height: PropTypes.Requireable<string>;
-    language: PropTypes.Requireable<string>;
-  };
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      data: [],
-      next: '',
-      loading: true,
-    };
-  }
+interface AllResults {
+  data: MyProps[];
+}
 
-  getSearchInfo = () => {
-    const url = localStorage.getItem('search');
-    const searchData = () => {
-      axios
-        .get(`https://swapi.dev/api/species/?search=${url}`)
-        .then((response) => {
-          this.setState({
-            data: response.data.results,
-            next: response.data.next,
-            loading: false,
-          });
-        })
-        .catch((error) => console.log(error));
-    };
-    searchData();
-  };
-
-  getStartInfo = () => {
-    const url: string = 'https://swapi.dev/api/species/';
-    let allData: MyProps[] = [];
-
-    const fetchData = (url: string) => {
-      axios
-        .get(url)
-        .then((response) => {
-          allData = [...allData, ...response.data.results];
-          if (response.data.next) {
-            fetchData(response.data.next);
-          } else {
-            console.log(allData);
-          }
-          this.setState({
-            data: allData,
-            next: response.data.next,
-            loading: false,
-          });
-        })
-        .catch((error) => console.log(error));
-    };
-
-    fetchData(url);
-  };
-
-  componentDidMount(): void {
-    console.log(localStorage.getItem('search'));
-    localStorage.getItem('search') ? this.getSearchInfo() : this.getStartInfo();
-  }
-
+class BottomSectionView extends Component<AllResults> {
   render() {
-    const { data } = this.state;
+    const { data } = this.props;
     return (
       <>
-        <div className="bottomsection">
-          {this.state.loading ? <Loader /> : ''}
-          {data.map((item) => (
-            <BottomSectionItem
-              key={item.name}
-              name={item.name}
-              classification={item.classification}
-              language={item.language}
-              average_height={item.average_height}
-              homeworld={item.homeworld}
-            />
-          ))}
-        </div>
+        {data.map((item, index) => (
+          <div key={index} className="result-item">
+            <h3 className="result-item_name">
+              <span className="result-item_span">Hero name: </span>
+              {item.name}
+            </h3>
+            <h5 className="result-item_classification">
+              <span className="result-item_span">Classification: </span>
+              {item.classification}
+            </h5>
+            <h5 className="result-item_height">
+              <span className="result-item_span">Height: </span>
+              {item.average_height}
+            </h5>
+            <h5 className="result-item_language">
+              <span className="result-item_span">Language: </span>
+              {item.language}
+            </h5>
+            <h5 className="result-item_homeworld">
+              <span className="result-item_span">Homeworld: </span>
+              <a className="result-item_link" href={item.homeworld}>
+                {item.homeworld}
+              </a>
+            </h5>
+          </div>
+        ))}
       </>
     );
   }
 }
+
+export default BottomSectionView;

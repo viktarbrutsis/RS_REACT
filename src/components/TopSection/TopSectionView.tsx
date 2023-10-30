@@ -14,8 +14,8 @@ class TopSectionView extends Component<SearchResult, { searchValue: string }> {
   inputRef = createRef<HTMLInputElement>();
 
   getSearchValue = async () => {
-    this.setState({ searchValue: this.inputRef.current?.value || '' });
-    localStorage.setItem('search', this.inputRef.current?.value || '');
+    await this.setState({ searchValue: this.inputRef.current?.value || '' });
+    await localStorage.setItem('search', this.inputRef.current?.value || '');
     this.props.onSearch(this.state.searchValue.trim());
     // this.inputRef.current.value = '';
   };

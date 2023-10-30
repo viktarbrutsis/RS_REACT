@@ -41,7 +41,7 @@ class MainPageView extends Component<object, Data> {
     }
   }
 
-  getSearchInfo = async (local: string) => {
+  getSearchInfo = (local: string) => {
     const searchData = () => {
       axios
         .get(`https://swapi.dev/api/species/?search=${local}`)
@@ -57,12 +57,12 @@ class MainPageView extends Component<object, Data> {
     searchData();
   };
 
-  getStartInfo = () => {
+  getStartInfo = async () => {
     const url: string = 'https://swapi.dev/api/species/';
     let allData: MyProps[] = [];
 
-    const fetchData = (url: string) => {
-      axios
+    const fetchData = async (url: string) => {
+      await axios
         .get(url)
         .then((response) => {
           allData = [...allData, ...response.data.results];

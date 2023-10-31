@@ -1,12 +1,16 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import TopSectionView from '../TopSection/TopSectionView';
 import axios from 'axios';
 import Loader from '../loader/Loader';
 import BottomSectionView from '../BottomSection/BottomSectionView';
 
-interface SearchResult {
-  getSearchInfo: (searchValue: string) => void;
-}
+// interface SearchInfo {
+//   getSearchInfo: (searchValue: string) => void;
+// }
+
+// interface StartInfo {
+//   getSearchValue: (searchValue: string) => void;
+// }
 
 export interface MyProps {
   key: string;
@@ -15,53 +19,36 @@ export interface MyProps {
   average_height: string;
   homeworld: string;
   language: string;
+  data: [];
 }
 
-interface Data {
-  data: MyProps[];
-  next: string;
-  loading: boolean;
-  local?: string;
-}
+function MainPageView() {
+  const [data, setData] = useState<MyProps[]>([]);
+  // const [next, setNext] = useState('');
+  const [loading, setLoading] = useState(true);
+  // const [local, setLocal] = useState<string>('');
 
-class MainPageView extends Component<object, Data> {
-  constructor(props: Data) {
-    super(props);
-    this.state = {
-      data: [],
-      next: '',
-      loading: true,
-      local: '',
-    };
+  async function getSearchValue(value: string) {
+    console.log(value);
+    (await value) ? getSearchInfo(value) : getStartInfo();
   }
 
-  componentDidMount(): void {
-    const local = localStorage.getItem('search');
-    console.log('From DidMount ' + local);
-    if (local) {
-      this.getSearchInfo(local);
-    } else {
-      this.getStartInfo();
-    }
-  }
-
-  getSearchInfo = (local: string) => {
+  function getSearchInfo(local: string) {
+    console.log('serach got from top section and show in Main page' + local);
     const searchData = () => {
       axios
         .get(`https://swapi.dev/api/species/?search=${local}`)
         .then((response) => {
-          this.setState({
-            data: response.data.results,
-            next: response.data.next,
-            loading: false,
-          });
+          setData(response.data.results);
+          // setNext(response.data.next);
+          setLoading(false);
         })
         .catch((error) => console.log(error));
     };
     searchData();
-  };
+  }
 
-  getStartInfo = async () => {
+  async function getStartInfo() {
     const url: string = 'https://swapi.dev/api/species/';
     let allData: MyProps[] = [];
 
@@ -72,38 +59,31 @@ class MainPageView extends Component<object, Data> {
           allData = [...allData, ...response.data.results];
           if (response.data.next) {
             fetchData(response.data.next);
-          } else {
-            console.log(allData);
           }
-          this.setState({
-            data: allData,
-            next: response.data.next,
-            loading: false,
-          });
+          setData(allData);
+          // setNext(response.data.next);
+          setLoading(false);
         })
         .catch((error) => console.log(error));
     };
 
     fetchData(url);
-  };
-
-  render() {
-    return (
-      <div className="container">
-        <h1>My first React App</h1>
-        <h3 className="search-title">Search the species in Star Wars</h3>
-        <TopSectionView getSearchInfo={this.getSearchInfo} startInfo={this.getStartInfo} />
-        <h3 className="search-result">Search result</h3>
-        <div className="bottomsection">
-          {this.state.loading ? (
-            <Loader />
-          ) : (
-            <BottomSectionView data={props.data} />
-          )}
-        </div>
-      </div>
-    );
   }
+
+  return (
+    <div className="container">
+      <h1>My first React App</h1>
+      <h3 className="search-title">Search the species in Star Wars</h3>
+      <TopSectionView
+        // getSearchInfo={getSearchInfo}
+        getSearchValue={getSearchValue}
+      />
+      <h3 className="search-result">Search result</h3>
+      <div className="bottomsection">
+        {loading ? <Loader /> : <BottomSectionView data={data} />}
+      </div>
+    </div>
+  );
 }
 
 export default MainPageView;

@@ -1,12 +1,8 @@
 import { useRef, useState } from 'react';
-import { MyProps } from '../MainPageView/MainPageView';
-
-// interface SearchResult {
-//   onSearch: (searchValue: string) => void;
-// }
 
 interface SearchResult {
-  getSearchInfo: (searchValue: string) => void;
+  // getSearchInfo: (searchValue: string) => void;
+  getSearchValue: (searchValue: string) => void;
 }
 
 function TopSectionView(props: SearchResult): JSX.Element {
@@ -21,13 +17,11 @@ function TopSectionView(props: SearchResult): JSX.Element {
 
   const [searchValue, setSearchValue] = useState('');
 
-  function getSearchValue(): void {
+  const search = async (): Promise<void> => {
     setSearchValue(inputRef.current?.value);
-    props.getSearchInfo(searchValue);
-    // await localStorage.setItem('search', this.inputRef.current?.value || '');
-
-    // this.inputRef.current.value = '';
-  }
+    // props.getSearchInfo(searchValue);
+    props.getSearchValue(searchValue);
+  };
 
   return (
     <div className="topsection">
@@ -41,7 +35,7 @@ function TopSectionView(props: SearchResult): JSX.Element {
         className="button topsection-button"
         aria-label="Save"
         type="button"
-        onClick={getSearchValue}
+        onClick={search}
       >
         Search
       </button>

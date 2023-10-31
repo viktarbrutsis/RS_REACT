@@ -4,7 +4,11 @@ import axios from 'axios';
 import Loader from '../loader/Loader';
 import BottomSectionView from '../BottomSection/BottomSectionView';
 
-interface MyProps {
+interface SearchResult {
+  getSearchInfo: (searchValue: string) => void;
+}
+
+export interface MyProps {
   key: string;
   name: string;
   classification: string;
@@ -88,13 +92,13 @@ class MainPageView extends Component<object, Data> {
       <div className="container">
         <h1>My first React App</h1>
         <h3 className="search-title">Search the species in Star Wars</h3>
-        <TopSectionView onSearch={this.getSearchInfo} />
+        <TopSectionView getSearchInfo={this.getSearchInfo} startInfo={this.getStartInfo} />
         <h3 className="search-result">Search result</h3>
         <div className="bottomsection">
           {this.state.loading ? (
             <Loader />
           ) : (
-            <BottomSectionView data={this.state.data} />
+            <BottomSectionView data={props.data} />
           )}
         </div>
       </div>

@@ -1,27 +1,22 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 interface SearchResult {
   // getSearchInfo: (searchValue: string) => void;
+  // getInitialSearchValue: (searchValue: string) => void;
   getSearchValue: (searchValue: string) => void;
 }
 
 function TopSectionView(props: SearchResult): JSX.Element {
-  // constructor(props: SearchResult) {
-  //   super(props);
-  //   this.state = {
-  //     searchValue: '',
-  //   };
-  // }
-
-  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-
   const [searchValue, setSearchValue] = useState('');
 
-  const search = async (): Promise<void> => {
-    setSearchValue(inputRef.current?.value);
-    // props.getSearchInfo(searchValue);
-    props.getSearchValue(searchValue);
-  };
+  async function search() {
+    // await setSearchValue(inputRef.current.value);
+    await props.getSearchValue(searchValue);
+  }
+
+  function inputHandler(event: { target: { value: string } }) {
+    setSearchValue(event.target.value);
+  }
 
   return (
     <div className="topsection">
@@ -29,7 +24,7 @@ function TopSectionView(props: SearchResult): JSX.Element {
         type="text"
         className="topsection-input"
         placeholder={searchValue}
-        ref={inputRef}
+        onChange={inputHandler}
       />
       <button
         className="button topsection-button"
@@ -39,6 +34,7 @@ function TopSectionView(props: SearchResult): JSX.Element {
       >
         Search
       </button>
+      <div>{searchValue}</div>
     </div>
   );
 }

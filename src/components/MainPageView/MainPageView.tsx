@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import TopSectionView from '../TopSection/TopSectionView';
-import axios from 'axios';
 import Loader from '../loader/Loader';
 import BottomSectionView from '../BottomSection/BottomSectionView';
+import ErrorButton from '../ErrorBoundary/ErrorButton';
+import axios from 'axios';
 
 // interface SearchInfo {
 //   getSearchInfo: (searchValue: string) => void;
@@ -24,34 +25,41 @@ export interface MyProps {
 
 function MainPageView() {
   const [data, setData] = useState<MyProps[]>([]);
-  // const [next, setNext] = useState('');
+  const [pages, setPages] = useState(0);
   const [loading, setLoading] = useState(true);
-  // const [local, setLocal] = useState<string>('');
+  const [local, setLocal] = useState<string>('');
 
-  async function getSearchValue(value: string) {
-    console.log(value);
-    (await value) ? getSearchInfo(value) : getStartInfo();
+  console.log('serach got from top section and show in Main page' + local);
+
+  useEffect(
+    function () {
+      if (local) {
+        searchData(local);
+      } else {
+        allData();
+      }
+    },
+    [local]
+  );
+
+  async function searchData(value: string) {
+    try {
+      const res = await fetch(`https://swapi.dev/api/species/?search=${value}`);
+      if (!res.ok) {
+        throw new Error('Something went wrong');
+      }
+      const data = await res.json();
+      setPages(Math.ceil(data.count / 10));
+      setData(data.results);
+      setLoading(false);
+    } catch {
+      (error: string) => console.log(error);
+    }
   }
 
-  function getSearchInfo(local: string) {
-    console.log('serach got from top section and show in Main page' + local);
-    const searchData = () => {
-      axios
-        .get(`https://swapi.dev/api/species/?search=${local}`)
-        .then((response) => {
-          setData(response.data.results);
-          // setNext(response.data.next);
-          setLoading(false);
-        })
-        .catch((error) => console.log(error));
-    };
-    searchData();
-  }
-
-  async function getStartInfo() {
-    const url: string = 'https://swapi.dev/api/species/';
+  async function allData() {
     let allData: MyProps[] = [];
-
+    const url: string = 'https://swapi.dev/api/species/';
     const fetchData = async (url: string) => {
       await axios
         .get(url)
@@ -70,18 +78,24 @@ function MainPageView() {
     fetchData(url);
   }
 
+  async function Search(value: string) {
+    await setLocal(value);
+  }
+
   return (
     <div className="container">
       <h1>My first React App</h1>
       <h3 className="search-title">Search the species in Star Wars</h3>
       <TopSectionView
         // getSearchInfo={getSearchInfo}
-        getSearchValue={getSearchValue}
+        // getInitialSearchValue={getInitialSearchValue}
+        getSearchValue={Search}
       />
       <h3 className="search-result">Search result</h3>
       <div className="bottomsection">
         {loading ? <Loader /> : <BottomSectionView data={data} />}
       </div>
+      <ErrorButton />
     </div>
   );
 }

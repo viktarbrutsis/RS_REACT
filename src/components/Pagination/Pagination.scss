@@ -1,0 +1,16 @@
+.pagination {
+  display: flex;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 30px;
+  justify-content: center;
+  &-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border: 2px solid $color-additional;
+  }
+}

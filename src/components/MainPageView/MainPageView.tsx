@@ -4,6 +4,7 @@ import Loader from '../loader/Loader';
 import BottomSectionView from '../BottomSection/BottomSectionView';
 import ErrorButton from '../ErrorBoundary/ErrorButton';
 import axios from 'axios';
+import Pagination from '../Pagination/Pagination';
 
 // interface SearchInfo {
 //   getSearchInfo: (searchValue: string) => void;
@@ -27,7 +28,9 @@ function MainPageView() {
   const [data, setData] = useState<MyProps[]>([]);
   const [pages, setPages] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
   const [local, setLocal] = useState<string>('');
+
 
   console.log('serach got from top section and show in Main page' + local);
 
@@ -49,7 +52,6 @@ function MainPageView() {
         throw new Error('Something went wrong');
       }
       const data = await res.json();
-      setPages(Math.ceil(data.count / 10));
       setData(data.results);
       setLoading(false);
     } catch {
@@ -65,12 +67,14 @@ function MainPageView() {
         .get(url)
         .then((response) => {
           allData = [...allData, ...response.data.results];
+          console.log(total);
           if (response.data.next) {
             fetchData(response.data.next);
           }
           setData(allData);
-          // setNext(response.data.next);
+          setPages(Math.ceil(response.data.count / 10));
           setLoading(false);
+          setTotal(response.data.count);
         })
         .catch((error) => console.log(error));
     };
@@ -95,6 +99,7 @@ function MainPageView() {
       <div className="bottomsection">
         {loading ? <Loader /> : <BottomSectionView data={data} />}
       </div>
+      <Pagination number={pages} arrayPagination={[]} />
       <ErrorButton />
     </div>
   );

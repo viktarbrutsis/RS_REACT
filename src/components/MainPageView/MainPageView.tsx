@@ -30,7 +30,7 @@ function MainPageView() {
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
   const [local, setLocal] = useState<string>('');
-
+  const [pageNumber, setPageNumber] = useState<string>('');
 
   console.log('serach got from top section and show in Main page' + local);
 
@@ -43,6 +43,15 @@ function MainPageView() {
       }
     },
     [local]
+  );
+
+  useEffect(
+    function () {
+      if (pageNumber) {
+        showPage(pageNumber);
+      }
+    },
+    [pageNumber]
   );
 
   async function searchData(value: string) {
@@ -86,6 +95,28 @@ function MainPageView() {
     await setLocal(value);
   }
 
+  async function showPage(pageNumber: number) {
+    let allData: MyProps[] = [];
+    const url: string = `https://swapi.dev/api/species/${pageNumber}`;
+    const fetchData = async (url: string) => {
+      await axios
+        .get(url)
+        .then((response) => {
+          allData = [...allData, ...response.data.results];
+          setData(allData);
+          setLoading(false);
+        })
+        .catch((error) => console.log(error));
+    };
+
+    fetchData(url);
+  }
+
+  async function GetPageNumber(value: string) {
+    await setPageNumber(value);
+    console.log(pageNumber);
+  }
+
   return (
     <div className="container">
       <h1>My first React App</h1>
@@ -99,7 +130,11 @@ function MainPageView() {
       <div className="bottomsection">
         {loading ? <Loader /> : <BottomSectionView data={data} />}
       </div>
-      <Pagination number={pages} arrayPagination={[]} />
+      <Pagination
+        number={pages}
+        arrayPagination={[]}
+        getPageNumber={GetPageNumber}
+      />
       <ErrorButton />
     </div>
   );

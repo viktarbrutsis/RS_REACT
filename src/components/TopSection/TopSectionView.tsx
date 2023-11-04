@@ -1,45 +1,42 @@
-import { createRef, Component } from 'react';
+import { useState } from 'react';
 
-class TopSectionView extends Component<string, { searchValue: string }> {
-  constructor(placeholder: string | Readonly<string>) {
-    super(placeholder);
-    this.state = {
-      searchValue: localStorage.getItem('search') || 'search',
-    };
+interface SearchResult {
+  // getSearchInfo: (searchValue: string) => void;
+  // getInitialSearchValue: (searchValue: string) => void;
+  getSearchValue: (searchValue: string) => void;
+}
+
+function TopSectionView(props: SearchResult): JSX.Element {
+  const [searchValue, setSearchValue] = useState('');
+
+  async function search() {
+    // await setSearchValue(inputRef.current.value);
+    await props.getSearchValue(searchValue);
   }
 
-  inputRef = createRef<HTMLInputElement>();
-
-  getSearchValue = () => {
-    console.log(this.inputRef.current?.value);
-    localStorage.setItem('search', this.inputRef.current?.value || '');
-    this.setState({ searchValue: localStorage.getItem('search') || '' });
-    this.inputRef.current.value = '';
-    // localStorage.getItem('search');
-    // localStorage.clear();
-  };
-
-  render() {
-    return (
-      <div className="topsection">
-        <input
-          type="text"
-          className="topsection-input"
-          placeholder={localStorage.getItem('search')}
-          ref={this.inputRef}
-        />
-        <button
-          className="button topsection-button"
-          aria-label="Save"
-          type="button"
-          onClick={this.getSearchValue}
-        >
-          Search
-        </button>
-        {/* <div>{localStorage.getItem('search')}</div> */}
-      </div>
-    );
+  function inputHandler(event: { target: { value: string } }) {
+    setSearchValue(event.target.value);
   }
+
+  return (
+    <div className="topsection">
+      <input
+        type="text"
+        className="topsection-input"
+        placeholder={searchValue}
+        onChange={inputHandler}
+      />
+      <button
+        className="button topsection-button"
+        aria-label="Save"
+        type="button"
+        onClick={search}
+      >
+        Search
+      </button>
+      <div>{searchValue}</div>
+    </div>
+  );
 }
 
 export default TopSectionView;
